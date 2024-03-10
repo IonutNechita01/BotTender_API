@@ -7,6 +7,7 @@ from bluetooth_server.bluetooth_server import BluetoothServer
 
 with open("config.json", "r") as f:
     configServer = json.load(f)
+    f.close()
 
 host = socket.gethostbyname(socket.gethostname())
 configServer["host"] = host
