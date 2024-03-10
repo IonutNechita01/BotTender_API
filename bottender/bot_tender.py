@@ -14,10 +14,10 @@ class BotTender:
             return
         self._initialized = True
 
-        with open("../bottender/bot_tender_config.json", "r") as f:
+        with open("./bottender/bot_tender_config.json", "r") as f:
             botTenderConfig = json.load(f)
             f.close()
-        with open("../config.json", "r") as f:
+        with open("./config.json", "r") as f:
             serverConfig = json.load(f)
             f.close()
 
@@ -48,6 +48,3 @@ class BotTender:
             "status": self.status,
             "host": self.host
         }
-    
-botTender = BotTender()
-print(botTender.toJson())
