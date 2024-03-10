@@ -18,7 +18,7 @@ def start_server():
 
 def start_bluetooth_server():
     print("Bluetooth server started")
-    BluetoothServer().start()
+    BluetoothServer()
 
 if __name__ == "__main__":
     serverThread = threading.Thread(target=start_server)
