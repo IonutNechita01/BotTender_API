@@ -1,15 +1,25 @@
 import json
 
+class BotTender:
+    _instance = None
 
-with open("./bottender/bot_tender_config.json", "r") as f:
-    botTenderConfig = json.load(f)
-with open("../config.json", "w") as f:
-    serverConfig = json.load(f)
+    def __new__(cls, *args, **kwargs):
+        if cls._instance is None:
+            cls._instance = super().__new__(cls)
+            cls._instance._initialized = False
+        return cls._instance
 
-class BotTender():
+    def __init__(self):
+        if self._initialized:
+            return
+        self._initialized = True
 
-    def __init__(self, status=None):
-        self.status = status
+        with open("./bottender/bot_tender_config.json", "r") as f:
+            botTenderConfig = json.load(f)
+        with open("../config.json", "r") as f:
+            serverConfig = json.load(f)
+
+        self.status = None
         self.id = botTenderConfig["id"]
         self.name = botTenderConfig["name"]
         self.host = serverConfig["host"]

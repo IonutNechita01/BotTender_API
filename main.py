@@ -4,7 +4,7 @@ import json
 
 from bluetooth_server.bluetooth_server import BluetoothServer
 
-with open("config.json", "w") as f:
+with open("config.json", "r") as f:
     configServer = json.load(f)
 
 host = socket.gethostbyname(socket.gethostname())

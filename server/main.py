@@ -5,8 +5,6 @@ app = FastAPI()
 
 botTender = BotTender()
 
-
-
 @app.get("/info")
 async def info():
     return botTender.toJson()
