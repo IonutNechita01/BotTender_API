@@ -3,7 +3,7 @@ import socket
 import json
 import threading
 
-from bluetooth_server.bluetooth_server import BluetoothServer
+from bluetooth_server.bluetooth_server import startBluetoothServer
 
 with open("config.json", "r") as f:
     configServer = json.load(f)
@@ -18,7 +18,7 @@ def start_server():
 
 def start_bluetooth_server():
     print("Bluetooth server started")
-    BluetoothServer()
+    startBluetoothServer()
 
 if __name__ == "__main__":
     start_bluetooth_server()

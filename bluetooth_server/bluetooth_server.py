@@ -1,12 +1,16 @@
-from bluedot.btcomm import BluetoothServer as BltServer
+from bluedot.btcomm import BluetoothServer
 from signal import pause
 
 from bottender.bot_tender import BotTender
 
 botTender = BotTender()
-class BluetoothServer:
-    def __init__(self):
-        self.server = BltServer(onDataReceived)
 
-def onDataReceived(data):
-    print("Received: " + data)
+def startBluetoothServer():
+    def onDataReceived(data):
+        if data == "getHost":
+            host = botTender.getHost()
+            if host == "":
+                host = "None"
+            server.sendData(host)
+    
+    server = BluetoothServer(onDataReceived)
