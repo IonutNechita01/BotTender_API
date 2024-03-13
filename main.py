@@ -2,6 +2,7 @@ import uvicorn
 import socket
 import json
 import threading
+import socket
 
 from bluetooth_server.bluetooth_server import startBluetoothServer
 
@@ -9,7 +10,17 @@ with open("config.json", "r") as f:
     configServer = json.load(f)
     f.close()
 
-host = socket.gethostbyname(socket.gethostname())
+def get_local_ip():
+    try:
+        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        s.connect(("8.8.8.8", 80))
+        local_ip = s.getsockname()[0]
+        s.close()
+        return local_ip
+    except socket.error:
+        return "" 
+
+host = get_local_ip()
 configServer["host"] = host
 
 def start_server():

@@ -1,5 +1,4 @@
 from bluedot.btcomm import BluetoothServer
-from signal import pause
 
 from bottender.bot_tender import BotTender
 
@@ -7,10 +6,14 @@ botTender = BotTender()
 
 def startBluetoothServer():
     def onDataReceived(data):
-        if data == "getHost":
-            host = botTender.getHost()
-            if host == "":
-                host = "None"
-            server.sendData(host)
+        dataSplited = data.split('/')
+        path = dataSplited[0]
+        data = dataSplited[1]
+
+        if path == 'info': 
+            server.send(botTender.toJson())
+
+        if path == 'host': 
+            server.send(botTender.host)
     
     server = BluetoothServer(onDataReceived)
