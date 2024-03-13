@@ -48,3 +48,6 @@ class BotTender:
             "status": self.status,
             "host": self.host
         }
+    
+    def encode(self):
+        return json.dumps(self.toJson())

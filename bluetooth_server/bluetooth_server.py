@@ -36,9 +36,11 @@ def startBluetoothServer():
         dataSplited = data.split('/')
         path = dataSplited[0]
         data = json.loads(dataSplited[1])
+        print(path)
+        print(data)
 
         if path == 'info': 
-            server.send(botTender.toJson())
+            server.send(botTender.encode())
 
         if path == 'host': 
             server.send(botTender.host)
