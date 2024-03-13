@@ -1,14 +1,21 @@
 import uvicorn
 import socket
 import json
-import threading
 import socket
 
 from bluetooth_server.bluetooth_server import startBluetoothServer
 
-with open("config.json", "r") as f:
-    configServer = json.load(f)
-    f.close()
+def read_config():
+    try:
+        with open("config.json", "r") as f:
+            return json.load(f)
+    except FileNotFoundError:
+        print("Config file not found.")
+        return {}
+
+def write_config(config):
+    with open("config.json", "w") as f:
+        json.dump(config, f, indent=4)
 
 def get_local_ip():
     try:
@@ -18,20 +25,23 @@ def get_local_ip():
         s.close()
         return local_ip
     except socket.error:
-        return "" 
+        return ""
 
-host = get_local_ip()
-configServer["host"] = host
-
-def start_server():
-    print("Server started at http://" + host + ":8000")
-    uvicorn.run("server.main:app", host=host, port=8000, reload=True)
+def start_server(host, port):
+    print(f"HTTP server started at http://{host}:{port}")
+    uvicorn.run("server.main:app", host=host, port=port, reload=True)
 
 def start_bluetooth_server():
     print("Bluetooth server started")
     startBluetoothServer()
 
 if __name__ == "__main__":
-    start_bluetooth_server()
-    start_server()
+    config = read_config()
+    host = config.get("host") or get_local_ip()
+    http_port = config.get("http_port", 8000)
 
+    config["host"] = host
+    write_config(config)
+
+    start_bluetooth_server()
+    start_server(host, http_port)

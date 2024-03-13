@@ -1,3 +1,4 @@
 {
-    "host": ""
+    "host": "",
+    "http_port": 8000
 }
