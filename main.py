@@ -40,8 +40,8 @@ if __name__ == "__main__":
     host = get_local_ip()
     http_port = config.get("http_port", 8000)
 
-    config["host"] = host
-    write_config(config)
+    # config["host"] = host
+    # write_config(config)
 
     start_bluetooth_server()
     start_server(host, http_port)
