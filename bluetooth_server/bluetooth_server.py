@@ -9,38 +9,48 @@ botTender = BotTender()
 
 def connect_to_wifi(ssid, password):
     wifi = PyWiFi()
-    iface = wifi.interfaces()[0]
-    
+    iface_list = wifi.interfaces()
+
     try:
-        iface.disconnect()
-        time.sleep(3)
-        iface.scan()
-        time.sleep(3)
-        network_found = False
-        for network in iface.scan_results():
-            if network.ssid == ssid:
-                network_found = True
-                wifi_profile = iface.add_network_profile(network)
-                wifi_profile.auth = const.AUTH_ALG_OPEN
-                wifi_profile.akm.append(const.AKM_TYPE_WPA2PSK)
-                wifi_profile.cipher = const.CIPHER_TYPE_CCMP
-                wifi_profile.key = password
-                iface.connect(wifi_profile)
-                timeout = 30
-                start_time = time.time()
-                while iface.status() != const.IFACE_CONNECTED:
-                    if time.time() - start_time > timeout:
-                        raise TimeoutError("Connection timed out")
-                    time.sleep(1)
-                
+        for iface in iface_list:
+            print(f"Trying interface: {iface.name()}")
+            iface.disconnect()
+            time.sleep(5)
+            print("Scanning for networks...")
+            iface.scan()
+            time.sleep(5)
+
+            network_found = False
+            print("results found: ", iface.scan_results())
+            for network in iface.scan_results():
+                print(f"Found network: {network.ssid}")
+                if network.ssid == ssid:
+                    network_found = True
+                    print(f"Connecting to network: {ssid}")
+                    wifi_profile = iface.add_network_profile(network)
+                    wifi_profile.auth = const.AUTH_ALG_OPEN
+                    wifi_profile.akm.append(const.AKM_TYPE_WPA2PSK)
+                    wifi_profile.cipher = const.CIPHER_TYPE_CCMP
+                    wifi_profile.key = password
+                    iface.connect(wifi_profile)
+                    
+                    timeout = 30
+                    start_time = time.time()
+                    while iface.status() != const.IFACE_CONNECTED:
+                        if time.time() - start_time > timeout:
+                            raise TimeoutError("Connection timed out")
+                        time.sleep(1)
+                    print("Connected successfully!")
+                    return {"status": "connected", "interface": iface.name()}
+            
+            if network_found:
                 break
         
-        if network_found:
-            return {"status": "connected"}
-        else:
-            return {"status": "not found"}
-    
+        print("Network not found.")
+        return {"status": "not found"}
+
     except Exception as e:
+        print(f"Error occurred: {e}")
         return {"status": "error", "message": str(e)}
     
 def prepareResponse(data):
