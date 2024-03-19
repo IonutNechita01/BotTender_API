@@ -6,10 +6,12 @@ from bottender.bot_tender import BotTender
 
 botTender = BotTender()
 
-
 def connect_to_wifi(ssid, password):
     try:
-        wifi.Scheme.find('wlan0', '').delete()
+        # Check if a scheme exists before attempting to delete it
+        existing_scheme = wifi.Scheme.find('wlan0', '')
+        if existing_scheme:
+            existing_scheme.delete()
 
         wifi_scanner = wifi.Cell.all('wlan0')
         wifi_found = False
@@ -36,6 +38,7 @@ def connect_to_wifi(ssid, password):
             "status": "error",
             "message": str(e)
         }
+
 
 def prepareResponse(data):
     print(data)
