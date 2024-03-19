@@ -21,18 +21,12 @@ def connect_to_wifi(ssid, password):
             '}'
         ]
         config = '\n'.join(config_lines)
-        
-        # Ensure proper permissions
-        os.popen("sudo chmod a+w /etc/wpa_supplicant/wpa_supplicant.conf")
-        
-        # Write configuration to wpa_supplicant.conf
+
         with open("/etc/wpa_supplicant/wpa_supplicant.conf", "w") as wifi:
             wifi.write(config)
-        
-        # Reconfigure wpa_supplicant
-        os.popen("sudo wpa_cli -i wlan0 reconfigure")
-        
-        # Check if an IP address is assigned
+
+        subprocess.run(["sudo", "wpa_cli", "-i", "wlan0", "reconfigure"], check=True)
+
         ip_output = subprocess.check_output(['ip', 'addr', 'show', 'wlan0']).decode()
         if 'inet ' in ip_output:
             return {"status": "connected", "message": "Connected to WiFi"}
@@ -40,6 +34,8 @@ def connect_to_wifi(ssid, password):
             return {"status": "Error", "message": "Failed to obtain IP address."}
     except IOError as e:
         return {"status": "Error", "message": "IOError: {}".format(str(e))}
+    except subprocess.CalledProcessError as e:
+        return {"status": "Error", "message": "Command '{}' returned non-zero exit status {}".format(e.cmd, e.returncode)}
     except Exception as e:
         return {"status": "Error", "message": str(e)}
 
