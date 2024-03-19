@@ -30,6 +30,10 @@ def connect_to_wifi(ssid, password):
         return {"status": "connected"}
     else:
         return {"status": "not found"}
+    
+def prepareResponse(data):
+    return json.dumps(data)
+    
 
 def startBluetoothServer():
     def onDataReceived(data):
@@ -40,14 +44,14 @@ def startBluetoothServer():
         print(data)
 
         if path == 'info': 
-            server.send(botTender.encode())
+            server.send(prepareResponse(botTender.toJson()))
 
         if path == 'host': 
-            server.send(botTender.host)
+            server.send(prepareResponse(botTender.getHost()))
 
         if path == 'wifi-credentials':
             response = connect_to_wifi(data['ssid'], data['password'])
-            server.send(response)
+            server.send(prepareResponse(response))
             
     
     server = BluetoothServer(onDataReceived)

@@ -3,7 +3,7 @@ import json
 class BotTender:
     _instance = None
 
-    def __new__(cls, *args, **kwargs):
+    def __new__(cls, *_, **__):
         if cls._instance is None:
             cls._instance = super().__new__(cls)
             cls._instance._initialized = False
@@ -27,16 +27,24 @@ class BotTender:
         self.host = serverConfig["host"]
 
     def getStatus(self):
-        return self.status
+        return {
+            "status": self.status
+        }
     
     def getId(self):
-        return self.id
+        return {
+            "id": self.id
+        }
     
     def getName(self):
-        return self.name
+        return {
+            "name": self.name
+        }
 
     def getHost(self):
-        return self.host
+        return {
+            "host": self.host
+        }
     
     def setStatus(self, status):
         self.status = status
