@@ -16,11 +16,12 @@ def connect_to_wifi(ssid, password):
         subprocess.run(['sudo', 'iw', 'dev', 'wlan0', 'disconnect'])
 
         print("Connecting to", ssid)
-        subprocess.run(['sudo', 'iw', 'dev', 'wlan0', 'connect', ssid])
+        subprocess.run(['iw', 'dev', 'wlan0', 'connect', ssid])
 
         subprocess.run(['sleep', '5'])
 
-        password_output = subprocess.run(['sudo', 'wpa_passphrase', ssid, password], capture_output=True, text=True, input=password.encode())
+        password = password.encode('utf-8')
+        password_output = subprocess.run(['wpa_passphrase', ssid], capture_output=True, text=True, input=password)
         with open('/etc/wpa_supplicant/wpa_supplicant.conf', 'a') as f:
             f.write('\n' + password_output.stdout)
 
