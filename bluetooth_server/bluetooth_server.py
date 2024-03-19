@@ -9,6 +9,8 @@ botTender = BotTender()
 
 def connect_to_wifi(ssid, password):
     try:
+        wifi.Scheme.find('wlan0', '').delete()
+
         wifi_scanner = wifi.Cell.all('wlan0')
         wifi_found = False
         for cell in wifi_scanner:
@@ -22,12 +24,12 @@ def connect_to_wifi(ssid, password):
         if wifi_found:
             return {
                 "status": "success",
-                "message": "Connected to wifi"
+                "message": "Connected to WiFi: " + ssid
             }
         else:
             return {
                 "status": "error",
-                "message": "Wifi not found"
+                "message": "WiFi network not found"
             }
     except Exception as e:
         return {
