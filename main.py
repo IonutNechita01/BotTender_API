@@ -37,7 +37,7 @@ def start_bluetooth_server():
 
 if __name__ == "__main__":
     config = read_config()
-    host = config.get("host") or get_local_ip()
+    host = get_local_ip()
     http_port = config.get("http_port", 8000)
 
     config["host"] = host

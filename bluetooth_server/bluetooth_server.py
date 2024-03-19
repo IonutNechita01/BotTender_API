@@ -32,6 +32,7 @@ def connect_to_wifi(ssid, password):
         return {"status": "not found"}
     
 def prepareResponse(data):
+    print(data)
     return json.dumps(data)
     
 
