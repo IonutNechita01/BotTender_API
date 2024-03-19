@@ -1,5 +1,5 @@
 import json
-import os
+import wifi
 from bluedot.btcomm import BluetoothServer
 
 from bottender.bot_tender import BotTender
@@ -9,29 +9,31 @@ botTender = BotTender()
 
 def connect_to_wifi(ssid, password):
     try:
-        config_lines = [
-            'ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev',
-            'update_config=1',
-            'country=US',
-            '\n',
-            'network={',
-            '\tssid="{}"'.format(ssid),
-            '\tpsk="{}"'.format(password),
-            '}'
-        ]
-        config = '\n'.join(config_lines)
-
-        with open("/etc/wpa_supplicant/wpa_supplicant.conf", "w") as wifi:
-            wifi.write(config)
-            wifi.close()
+        wifi_scanner = wifi.Cell.all('wlan0')
+        wifi_found = False
+        for cell in wifi_scanner:
+            if cell.ssid == ssid:
+                scheme = wifi.Scheme.for_cell('wlan0', ssid, cell, password)
+                scheme.save()
+                scheme.activate()
+                wifi_found = True
+                break
         
-        os.popen("sudo wpa_cli -i wlan0 reconfigure")
-        
-    except IOError as e:
-        return {"status": "Error", "message": "IOError: {}".format(str(e))}
+        if wifi_found:
+            return {
+                "status": "success",
+                "message": "Connected to wifi"
+            }
+        else:
+            return {
+                "status": "error",
+                "message": "Wifi not found"
+            }
     except Exception as e:
-        return {"status": "Error", "message": str(e)}
-
+        return {
+            "status": "error",
+            "message": str(e)
+        }
 
 def prepareResponse(data):
     print(data)
