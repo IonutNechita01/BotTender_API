@@ -42,7 +42,9 @@ def connect_to_wifi(ssid, password):
         print(iface.status())
         print(iface.network_profiles())
         iface.connect(profile)
-        time.sleep(5)
+        time.sleep(30)
+        print("after connect")
+        print(iface.status())
         assert iface.status() == const.IFACE_CONNECTED, STATUS_INCORRECT_PASSWORD
         print("success")
         return {'status': STATUS_CONNECTED}
