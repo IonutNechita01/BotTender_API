@@ -23,7 +23,14 @@ def connect_to_wifi(ssid, password):
                 network_found = True
                 break
         assert network_found, STATUS_NETWORK_NOT_FOUND
+        print(iface.name())
+        print("network found")
+        print(iface.status())
+        print("before remove")
+        print(iface.network_profiles())
         iface.remove_all_network_profiles()
+        print("after remove")
+        print(iface.network_profiles())
         profile = Profile()
         profile.ssid = ssid
         profile.auth = const.AUTH_ALG_OPEN
@@ -31,6 +38,9 @@ def connect_to_wifi(ssid, password):
         profile.cipher = const.CIPHER_TYPE_CCMP
         profile.key = password
         iface.add_network_profile(profile)
+        print("before connect")
+        print(iface.status())
+        print(iface.network_profiles())
         iface.connect(profile)
         time.sleep(5)
         assert iface.status() == const.IFACE_CONNECTED, STATUS_INCORRECT_PASSWORD
@@ -38,7 +48,7 @@ def connect_to_wifi(ssid, password):
         return {'status': STATUS_CONNECTED}
     except Exception as eStatus:
         print(eStatus)
-        return {'status': eStatus}
+        return {'status': eStatus.args[0]}
 
 def prepareResponse(data):
     print(data)
