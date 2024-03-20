@@ -1,6 +1,7 @@
 import json
 import time
 import subprocess
+import requests
 from pywifi import PyWiFi, const, Profile
 from bluedot.btcomm import BluetoothServer
 
@@ -8,10 +9,11 @@ from bottender.bot_tender import BotTender
 
 botTender = BotTender()
 
+STATUS_CONNECTED = 0
+STATUS_NETWORK_NOT_FOUND = 1
+STATUS_INCORRECT_PASSWORD = 2
+
 def connect_to_wifi(ssid, password):
-    STATUS_CONNECTED = 0
-    STATUS_NETWORK_NOT_FOUND = 1
-    STATUS_INCORRECT_PASSWORD = 2
     try:
         wifi = PyWiFi()
         iface = wifi.interfaces()[1]
@@ -19,19 +21,11 @@ def connect_to_wifi(ssid, password):
         time.sleep(8)
         network_found = False
         for network_profile in iface.scan_results():
-            print(network_profile.ssid)
             if network_profile.ssid == ssid:
                 network_found = True
                 break
         assert network_found, STATUS_NETWORK_NOT_FOUND
-        print(iface.name())
-        print("network found")
-        print(iface.status())
-        print("before remove")
-        print(iface.network_profiles())
         iface.remove_all_network_profiles()
-        print("after remove")
-        print(iface.network_profiles())
         profile = Profile()
         profile.ssid = ssid
         profile.auth = const.AUTH_ALG_OPEN
@@ -39,18 +33,12 @@ def connect_to_wifi(ssid, password):
         profile.cipher = const.CIPHER_TYPE_CCMP
         profile.key = password
         profile = iface.add_network_profile(profile)
-        print("before connect")
-        print(iface.status())
-        print(iface.network_profiles())
         iface.disconnect()   
         iface.connect(profile)
-        time.sleep(30)
-        print("after connect")
-        print(iface.status())
+        time.sleep(8)
         assert iface.status() == const.IFACE_CONNECTED, STATUS_INCORRECT_PASSWORD
         cmd = ['sudo', 'nmcli', 'device', 'wifi', 'connect', ssid, 'password', password]
         subprocess.run(cmd, check=True)
-        print("success")
         return {'status': STATUS_CONNECTED}
     except Exception as eStatus:
         print(eStatus)
@@ -77,6 +65,16 @@ def startBluetoothServer():
 
         if path == 'wifi-credentials':
             response = connect_to_wifi(data['ssid'], data['password'])
+            if response['status'] == STATUS_CONNECTED:
+                subprocess.run(['sudo', 'systemctl', 'restart', 'myservice'], check=True)
+                while True:
+                    try:
+                        response = requests.get(f"http://{botTender.getHost()}:{8000}/")
+                        if response.status_code == 200:
+                            break
+                        time.sleep(2)
+                    except requests.exceptions.RequestException:
+                        pass
             server.send(prepareResponse(response))
 
     server = BluetoothServer(onDataReceived)
