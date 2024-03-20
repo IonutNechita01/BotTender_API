@@ -37,13 +37,13 @@ def connect_to_wifi(ssid, password):
         iface.connect(profile)
         time.sleep(8)
         assert iface.status() == const.IFACE_CONNECTED, STATUS_INCORRECT_PASSWORD
-        cmd = ['sudo', 'nmcli', 'device', 'wifi', 'connect', ssid, 'password', password]
+        cmd = ['nmcli', 'device', 'wifi', 'connect', ssid, 'password', password]
         subprocess.run(cmd, check=True)
-        return {'status': STATUS_CONNECTED}
-    except Exception as eStatus:
+        return {'status': str(STATUS_CONNECTED)}
+    except Exception as e:
         with open("wifi_log.txt", "w") as f:
-            f.write(str(eStatus))
-        return {'status': str(eStatus)}
+            f.write(str(e))
+        return {'status': str(e)}
 
 def prepareResponse(data):
     print(data)
