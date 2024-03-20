@@ -1,5 +1,6 @@
 import json
 import time
+import subprocess
 from pywifi import PyWiFi, const, Profile
 from bluedot.btcomm import BluetoothServer
 
@@ -37,15 +38,18 @@ def connect_to_wifi(ssid, password):
         profile.akm.append(const.AKM_TYPE_WPA2PSK)
         profile.cipher = const.CIPHER_TYPE_CCMP
         profile.key = password
-        iface.add_network_profile(profile)
+        profile = iface.add_network_profile(profile)
         print("before connect")
         print(iface.status())
         print(iface.network_profiles())
+        iface.disconnect()   
         iface.connect(profile)
         time.sleep(30)
         print("after connect")
         print(iface.status())
         assert iface.status() == const.IFACE_CONNECTED, STATUS_INCORRECT_PASSWORD
+        cmd = ['sudo', 'nmcli', 'device', 'wifi', 'connect', ssid, 'password', password]
+        subprocess.run(cmd, check=True)
         print("success")
         return {'status': STATUS_CONNECTED}
     except Exception as eStatus:
