@@ -41,8 +41,9 @@ def connect_to_wifi(ssid, password):
         subprocess.run(cmd, check=True)
         return {'status': STATUS_CONNECTED}
     except Exception as eStatus:
-        print(eStatus)
-        return {'status': eStatus.args[0]}
+        with open("wifi_log.txt", "w") as f:
+            f.write(str(eStatus))
+        return {'status': str(eStatus)}
 
 def prepareResponse(data):
     print(data)
