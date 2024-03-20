@@ -67,7 +67,7 @@ def startBluetoothServer():
         if path == 'wifi-credentials':
             response = connect_to_wifi(data['ssid'], data['password'])
             if response['status'] == STATUS_CONNECTED:
-                subprocess.run(['sudo', 'systemctl', 'restart', 'myservice'], check=True)
+                subprocess.run(['systemctl', 'restart', 'myservice'], check=True)
                 while True:
                     try:
                         response = requests.get(f"http://{botTender.getHost()}:{8000}/")
