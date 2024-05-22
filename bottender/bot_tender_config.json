@@ -1,39 +1,8 @@
 {
-    "id": "0000-0000-0000",
-    "name": "BotTender",
-    "status": null,
-    "host": "192.168.100.27",
-    "availableIngredients": [
-        {
-            "name": "Coca cola 330ml",
-            "position": 0,
-            "id": "d1mKenQ2qLpz9aNCxVJN",
-            "imageUrl": "https://firebasestorage.googleapis.com/v0/b/bottender-9a87d.appspot.com/o/ingredient%2Fcoca_cola.jpg?alt=media&token=cef7bff1-1c61-4619-b493-e9b57c0b7c30",
-            "barcode": "5449000000996",
-            "type": "soda",
-            "subtype": "cola",
-            "quantity": -270.0
-        },
-        {
-            "name": "Coca-Cola 2L",
-            "position": 1,
-            "id": "JEXdFxF6jarHA0upN47e",
-            "imageUrl": "https://firebasestorage.googleapis.com/v0/b/bottender-9a87d.appspot.com/o/ingredient%2Fcocal_cola_2L.png?alt=media&token=5d163520-d0e0-4328-ac45-dec37edc380a",
-            "barcode": "5449000009067",
-            "type": "soda",
-            "subtype": "cola",
-            "quantity": 400.0
-        },
-        {
-            "name": "Jack Daniel's",
-            "position": 2,
-            "id": "FAnWWdO7lcnH5AHQDg1p",
-            "imageUrl": "https://firebasestorage.googleapis.com/v0/b/bottender-9a87d.appspot.com/o/ingredient%2Fjack_daniels_wisky_clasic.jpg?alt=media&token=603af40a-8483-4247-942d-d6bbbff5b876",
-            "barcode": "5099873089712",
-            "type": "spirit",
-            "subtype": "whiskey",
-            "quantity": 400.0
-        }
-    ],
-    "maxAvailableIngredientsCount": 10
+  "id": "0000-0000-0000",
+  "name": "BotTender",
+  "status": null,
+  "availableIngredients": [
+  ],
+  "maxAvailableIngredientsCount": 10
 }

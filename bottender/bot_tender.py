@@ -3,6 +3,8 @@ from typing import List
 
 from models.ingredient_model import IngredientModel
 from utils.constants import Response
+from time import sleep
+from threading import Thread
 
 
 class BotTender:
@@ -119,14 +121,23 @@ class BotTender:
         }
     
     def prepareCocktail(self, cocktail):
+        pumpThreads = []
         for ingredient in cocktail.ingredients:
             for availableIngredient in self.availableIngredients:
-                if availableIngredient.id == ingredient["id"]:
-                    availableIngredient.quantity -= ingredient["quantity"]
-                    if availableIngredient.quantity < 0:
+                if availableIngredient.position == ingredient["position"]:
+                    if availableIngredient.quantity <= ingredient["quantity"]:
                         return {
                             "status": "Not enough " + availableIngredient.name
                         }
+                    availableIngredient.quantity -= ingredient["quantity"]
+                    pumpThreads.append(Thread(target=self.pourIngredient, args=(availableIngredient,)))
+                
+        for thread in pumpThreads:
+            thread.start()
+
+        for thread in pumpThreads:
+            thread.join()
+        
         try:
             with open("./bottender/bot_tender_config.json", "w") as f:
                 json.dump(self.toJson(), f)
@@ -138,6 +149,9 @@ class BotTender:
             return {
                 "status": "Error saving changes to bot tender config file"
             }
+        
+    def pourIngredient(self, ingredient):
+        sleep(ingredient.quantity * 0.01)
 
     def encode(self):
         return json.dumps(self.toJson())
