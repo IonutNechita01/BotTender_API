@@ -5,6 +5,9 @@ from models.ingredient_model import IngredientModel
 from utils.constants import Response
 from time import sleep
 from threading import Thread
+import RPI.GPIO as GPIO
+
+GPIO.setmode(GPIO.BCM)
 
 
 class BotTender:
@@ -151,7 +154,15 @@ class BotTender:
             }
         
     def pourIngredient(self, ingredient):
-        sleep(ingredient.quantity * 0.01)
+        GPIO.setup(17, GPIO.LOW)
+        GPIO.setup(27, GPIO.LOW)
+        GPIO.setup(22, GPIO.LOW)
+        GPIO.setul(6, GPIO.LOW)
+        sleep(3)
+        GPIO.setup(17, GPIO.HIGH)
+        GPIO.setup(27, GPIO.HIGH)
+        GPIO.setup(22, GPIO.HIGH)
+        GPIO.setul(6, GPIO.HIGH)
 
     def encode(self):
         return json.dumps(self.toJson())
