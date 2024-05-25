@@ -53,8 +53,8 @@ def prepareResponse(data):
 def startBluetoothServer():
     def onDataReceived(data):
         dataSplited = data.split('/')
-        path = dataSplited[0]
-        data = json.loads(dataSplited[1])
+        path = dataSplited[1]
+        data = json.loads(dataSplited[2])
         print(path)
         print(data)
 
