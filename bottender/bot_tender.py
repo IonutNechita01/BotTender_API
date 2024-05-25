@@ -9,6 +9,8 @@ import RPi.GPIO as GPIO
 
 GPIO.setmode(GPIO.BCM)
 
+FLOW_RATE = 0.1 # TODO: find the correct value for this
+
 
 class BotTender:
     _instance = None
@@ -20,10 +22,6 @@ class BotTender:
         return cls._instance
 
     def __init__(self):
-        GPIO.setup(22, GPIO.OUT)
-        GPIO.setup(17, GPIO.OUT)
-        GPIO.setup(27, GPIO.OUT)
-        GPIO.setup(6, GPIO.OUT)
         if self._initialized:
             return
         self._initialized = True
@@ -34,6 +32,13 @@ class BotTender:
         with open("./config.json", "r") as f:
             serverConfig = json.load(f)
             f.close()
+        with open("./pump_config.json", "r") as f:
+            pumpConfig = json.load(f)
+            f.close()
+
+        self.pumps = pumpConfig["pumps"]
+        for pump in self.pumps.keys():
+            GPIO.setup(self.pumps[pump], GPIO.OUT)
 
         self.status = None
         self.id = botTenderConfig["id"]
@@ -158,16 +163,9 @@ class BotTender:
             }
         
     def pourIngredient(self, ingredient):
-        print("start")
-        GPIO.output(22, GPIO.HIGH)
-        GPIO.output(27, GPIO.HIGH)
-        GPIO.output(17, GPIO.HIGH)
-        GPIO.output(6, GPIO.HIGH)
-        sleep(5)
-        GPIO.output(22, GPIO.LOW)
-        GPIO.output(27, GPIO.LOW)
-        GPIO.output(17, GPIO.LOW)
-        GPIO.output(6, GPIO.LOW)
+        GPIO.output(self.pumps[ingredient.position], GPIO.HIGH)
+        sleep(ingredient.quantity * FLOW_RATE)
+        GPIO.output(self.pumps[ingredient.position], GPIO.LOW)
 
     def encode(self):
         return json.dumps(self.toJson())

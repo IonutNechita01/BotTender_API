@@ -1,6 +1,6 @@
 from pydantic import BaseModel, Field
 
-class CokctailModel(BaseModel):
+class CocktailModel(BaseModel):
     name: str = Field(default='')
     id: str = Field(default='')
     imageUrl: str = Field(default='assets/images/ingredient_icon.png')
@@ -16,7 +16,7 @@ class CokctailModel(BaseModel):
 
     @staticmethod
     def fromJson(json):
-        return CokctailModel(
+        return CocktailModel(
             name=json["name"],
             id=json["id"],
             imageUrl=json["imageUrl"],

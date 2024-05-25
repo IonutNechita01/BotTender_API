@@ -4,6 +4,8 @@ import subprocess
 import requests
 from pywifi import PyWiFi, const, Profile
 from bluedot.btcomm import BluetoothServer
+from models.ingredient_model import IngredientModel
+from models.cocktail_model import CocktailModel
 
 from bottender.bot_tender import BotTender
 
@@ -76,6 +78,21 @@ def startBluetoothServer():
                         time.sleep(2)
                     except requests.exceptions.RequestException:
                         pass
+            server.send(prepareResponse(response))
+
+        if path == 'addIngredient':
+            ingredient = IngredientModel.fromJson(data)
+            response = botTender.addIngredient(ingredient)
+            server.send(prepareResponse(response))
+
+        if path == 'removeIngredient':
+            ingredient = IngredientModel.fromJson(data)
+            response = botTender.removeIngredient(ingredient)
+            server.send(prepareResponse(response))
+
+        if path == 'prepareCocktail':
+            cocktail = CocktailModel.fromJson(data)
+            response = botTender.prepareCocktail(cocktail)
             server.send(prepareResponse(response))
 
     server = BluetoothServer(onDataReceived)
