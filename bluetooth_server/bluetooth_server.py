@@ -54,19 +54,20 @@ def prepareResponse(data):
 
 def startBluetoothServer():
     def onDataReceived(data):
-        dataSplited = data.split('/')
-        path = dataSplited[1]
-        data = json.loads(dataSplited[2])
-        print(path)
+        dataSplited = data.split('::')
+        path = dataSplited[0]
+        data = None
+        if len(dataSplited) > 1:
+            data = json.loads(dataSplited[1])
         print(data)
-
-        if path == 'info':
+        print(path)
+        if path == '/info':
             server.send(prepareResponse(botTender.toJson()))
 
-        if path == 'host':
+        if path == '/host':
             server.send(prepareResponse(botTender.getHost()))
 
-        if path == 'wifi-credentials':
+        if path == '/wifi-credentials':
             response = connect_to_wifi(data['ssid'], data['password'])
             if response['status'] == STATUS_CONNECTED:
                 subprocess.run(['systemctl', 'restart', 'myservice'], check=True)
@@ -80,17 +81,17 @@ def startBluetoothServer():
                         pass
             server.send(prepareResponse(response))
 
-        if path == 'addIngredient':
+        if path == '/addIngredient':
             ingredient = IngredientModel.fromJson(data)
             response = botTender.addIngredient(ingredient)
             server.send(prepareResponse(response))
 
-        if path == 'removeIngredient':
+        if path == '/removeIngredient':
             ingredient = IngredientModel.fromJson(data)
             response = botTender.removeIngredient(ingredient)
             server.send(prepareResponse(response))
 
-        if path == 'prepareCocktail':
+        if path == '/prepareCocktail':
             cocktail = CocktailModel.fromJson(data)
             response = botTender.prepareCocktail(cocktail)
             server.send(prepareResponse(response))

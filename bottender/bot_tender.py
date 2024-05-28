@@ -9,7 +9,7 @@ import RPi.GPIO as GPIO
 
 GPIO.setmode(GPIO.BCM)
 
-FLOW_RATE = 0.1 # TODO: find the correct value for this
+FLOW_RATE = 1 # TODO: find the correct value for this
 
 
 class BotTender:
@@ -32,7 +32,7 @@ class BotTender:
         with open("./config.json", "r") as f:
             serverConfig = json.load(f)
             f.close()
-        with open("./pump_config.json", "r") as f:
+        with open("./bottender/pump_config.json", "r") as f:
             pumpConfig = json.load(f)
             f.close()
 
@@ -142,7 +142,7 @@ class BotTender:
                             "status": "Not enough " + availableIngredient.name
                         }
                     availableIngredient.quantity -= ingredient["quantity"]
-                    pumpThreads.append(Thread(target=self.pourIngredient, args=(availableIngredient,)))
+                    pumpThreads.append(Thread(target=self.pourIngredient, args=(IngredientModel.fromJson(ingredient),)))
                 
         for thread in pumpThreads:
             thread.start()
@@ -163,9 +163,10 @@ class BotTender:
             }
         
     def pourIngredient(self, ingredient):
-        GPIO.output(self.pumps[ingredient.position], GPIO.HIGH)
+        GPIO.output(self.pumps[str(ingredient.position)], GPIO.HIGH)
         sleep(ingredient.quantity * FLOW_RATE)
-        GPIO.output(self.pumps[ingredient.position], GPIO.LOW)
+        GPIO.output(self.pumps[str(ingredient.position)], GPIO.LOW)
+        print("END")
 
     def encode(self):
         return json.dumps(self.toJson())

@@ -1,7 +1,7 @@
 import json
 from fastapi import FastAPI
 from bottender.bot_tender import BotTender
-from models.cocktail_model import CokctailModel
+from models.cocktail_model import CocktailModel
 from models.ingredient_model import IngredientModel 
 
 app = FastAPI()
@@ -35,7 +35,7 @@ async def remove_ingredient(ingredient: IngredientModel):
     return botTender.removeIngredient(ingredient)
 
 @app.post("/prepareCocktail")
-async def prepare_cocktail(cocktail: CokctailModel):
+async def prepare_cocktail(cocktail: CocktailModel):
     print("Preparing cocktail")
     print(cocktail.toJson())
     return botTender.prepareCocktail(cocktail)
