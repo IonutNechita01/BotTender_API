@@ -3,7 +3,7 @@ import socket
 import json
 import socket
 
-from bluetooth_server.bluetooth_server import startBluetoothServer
+# from bluetooth_server.bluetooth_server import startBluetoothServer
 
 def read_config():
     try:
@@ -31,9 +31,9 @@ def start_server(host, port):
     print(f"HTTP server started at http://{host}:{port}")
     uvicorn.run("server.main:app", host=host, port=port, reload=True)
 
-def start_bluetooth_server():
-    print("Bluetooth server started")
-    startBluetoothServer()
+# def start_bluetooth_server():
+#     print("Bluetooth server started")
+#     startBluetoothServer()
 
 if __name__ == "__main__":
     config = read_config()
@@ -43,5 +43,5 @@ if __name__ == "__main__":
     config["host"] = host
     write_config(config)
 
-    start_bluetooth_server()
+    # start_bluetooth_server()
     start_server(host, http_port)

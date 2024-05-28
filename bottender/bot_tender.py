@@ -5,9 +5,9 @@ from models.ingredient_model import IngredientModel
 from utils.constants import Response
 from time import sleep
 from threading import Thread
-import RPi.GPIO as GPIO
+# import RPi.GPIO as GPIO
 
-GPIO.setmode(GPIO.BCM)
+# GPIO.setmode(GPIO.BCM)
 
 FLOW_RATE = 1 # TODO: find the correct value for this
 
@@ -36,11 +36,10 @@ class BotTender:
             pumpConfig = json.load(f)
             f.close()
 
-        self.pumps = pumpConfig["pumps"]
-        for pump in self.pumps.keys():
-            GPIO.setup(self.pumps[pump], GPIO.OUT)
+        # self.pumps = pumpConfig["pumps"]
+        # for pump in self.pumps.keys():
+        #     GPIO.setup(self.pumps[pump], GPIO.OUT)
 
-        self.status = None
         self.id = botTenderConfig["id"]
         self.name = botTenderConfig["name"]
         self.host = serverConfig["host"]
@@ -76,8 +75,8 @@ class BotTender:
     def toJson(self):
         return {
             "id": self.id,
+            "ip": self.host,
             "name": self.name,
-            "status": self.status,
             "host": self.host,
             "availableIngredients": [ingredient.toJson() for ingredient in self.availableIngredients],
             "maxAvailableIngredientsCount": self.maxAvailableIngredientsCount
@@ -90,7 +89,7 @@ class BotTender:
                 try:
                     self.availableIngredients[i] = ingredient
                     with open("./bottender/bot_tender_config.json", "w") as f:
-                        json.dump(self.toJson(), f)
+                        json.dump(self.toJson(), f, indent=4)
                         f.close()
                 except:
                     return {
@@ -103,7 +102,7 @@ class BotTender:
         self.availableIngredients.append(ingredient)
         try:
             with open("./bottender/bot_tender_config.json", "w") as f:
-                json.dump(self.toJson(), f)
+                json.dump(self.toJson(), f, indent=4)
                 f.close()
             return {
                 "status": Response.SUCCESS
@@ -119,7 +118,7 @@ class BotTender:
                 self.availableIngredients.pop(i)
                 try:
                     with open("./bottender/bot_tender_config.json", "w") as f:
-                        json.dump(self.toJson(), f)
+                        json.dump(self.toJson(), f, indent=4)
                         f.close()
                     return {
                         "status": Response.SUCCESS
@@ -152,7 +151,7 @@ class BotTender:
         
         try:
             with open("./bottender/bot_tender_config.json", "w") as f:
-                json.dump(self.toJson(), f)
+                json.dump(self.toJson(), f, indent=4)
                 f.close()
             return {
                 "status": Response.SUCCESS
