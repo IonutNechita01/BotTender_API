@@ -1,12 +1,9 @@
 import uvicorn
 import socket
 import json
-import socket
+from threading import Thread
 from bottender.bot_tender_ui import BotTenderUI
 from bottender.bot_tender import BotTender
-from threading import Thread
-
-
 from bluetooth_server.bluetooth_server import startBluetoothServer
 
 def read_config():
@@ -41,15 +38,22 @@ def start_bluetooth_server():
 
 if __name__ == "__main__":
     bot_tender = BotTender()
-    app = BotTenderUI(bot_tender)
-    ui_thread = Thread(target=app.mainloop)
-    ui_thread.start()
+    
     config = read_config()
     host = get_local_ip()
     http_port = config.get("http_port", 8000)
-
+    
     config["host"] = host
     write_config(config)
+    
+    # Start HTTP server in a new thread
+    http_thread = Thread(target=start_server, args=(host, http_port))
+    http_thread.start()
+    
+    # Start Bluetooth server in a new thread
+    bt_thread = Thread(target=start_bluetooth_server)
+    bt_thread.start()
 
-    start_bluetooth_server()
-    start_server(host, http_port)
+    # Start the tkinter main loop in the main thread
+    app = BotTenderUI(bot_tender)
+    app.mainloop()
