@@ -9,7 +9,7 @@ import RPi.GPIO as GPIO
 
 GPIO.setmode(GPIO.BCM)
 
-FLOW_RATE = 1.25 # TODO: find the correct value for this
+FLOW_RATE = 1.25
 
 
 class BotTender:
@@ -51,7 +51,7 @@ class BotTender:
 
     def getStatus(self):
         return {
-            "status": self.status
+            "status": sxvfb-run -a python launch_bottender_ui.pyelf.status
         }
 
     def getId(self):
