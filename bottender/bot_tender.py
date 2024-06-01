@@ -5,11 +5,11 @@ from models.ingredient_model import IngredientModel
 from utils.constants import Response
 from time import sleep
 from threading import Thread
-# import RPi.GPIO as GPIO
+import RPi.GPIO as GPIO
 
-# GPIO.setmode(GPIO.BCM)
+GPIO.setmode(GPIO.BCM)
 
-FLOW_RATE = 1 # TODO: find the correct value for this
+FLOW_RATE = 1.25 # TODO: find the correct value for this
 
 
 class BotTender:
@@ -36,9 +36,9 @@ class BotTender:
             pumpConfig = json.load(f)
             f.close()
 
-        # self.pumps = pumpConfig["pumps"]
-        # for pump in self.pumps.keys():
-        #     GPIO.setup(self.pumps[pump], GPIO.OUT)
+        self.pumps = pumpConfig["pumps"]
+        for pump in self.pumps.keys():
+            GPIO.setup(self.pumps[pump], GPIO.OUT)
 
         self.id = botTenderConfig["id"]
         self.name = botTenderConfig["name"]

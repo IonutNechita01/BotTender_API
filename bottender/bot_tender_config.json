@@ -1,1 +1,49 @@
-{"id": "0000-0000-0000", "name": "BotTender", "status": null, "host": "192.168.100.46", "availableIngredients": [{"name": "coca cola 1.25", "position": -1, "id": "5AQm8JkUVPlpwh6GjEWz", "imageUrl": "https://firebasestorage.googleapis.com/v0/b/bottender-9a87d.appspot.com/o/ingredient%2Fcoca_cola_1.25.jpg?alt=media&token=1d331598-6ea4-418a-b0bb-7c6d49bb0384", "barcode": "5942321000077", "type": "soda", "subtype": "cola", "quantity": 750.0}, {"name": "coca cola 1.25", "position": 0, "id": "5AQm8JkUVPlpwh6GjEWz", "imageUrl": "https://firebasestorage.googleapis.com/v0/b/bottender-9a87d.appspot.com/o/ingredient%2Fcoca_cola_1.25.jpg?alt=media&token=1d331598-6ea4-418a-b0bb-7c6d49bb0384", "barcode": "5942321000077", "type": "soda", "subtype": "cola", "quantity": 1250.0}], "maxAvailableIngredientsCount": 4}
+{
+    "id": "0000-0000-0000",
+    "ip": "192.168.1.191",
+    "name": "BotTender",
+    "host": "192.168.1.191",
+    "availableIngredients": [
+        {
+            "name": "James Cook white rum",
+            "position": 0,
+            "id": "vumH4iqS7iD1oyYzP3jj",
+            "imageUrl": "https://firebasestorage.googleapis.com/v0/b/bottender-9a87d.appspot.com/o/ingredient%2Fjames_cook_white_rum.jpg?alt=media&token=dcb7b417-0427-4cf3-a4fa-070a843c9b52",
+            "barcode": "5949026101146",
+            "type": "spirit",
+            "subtype": "rum",
+            "quantity": 260.0
+        },
+        {
+            "name": "coca cola 1.25",
+            "position": 1,
+            "id": "5AQm8JkUVPlpwh6GjEWz",
+            "imageUrl": "https://firebasestorage.googleapis.com/v0/b/bottender-9a87d.appspot.com/o/ingredient%2Fcoca_cola_1.25.jpg?alt=media&token=1d331598-6ea4-418a-b0bb-7c6d49bb0384",
+            "barcode": "5942321000077",
+            "type": "soda",
+            "subtype": "cola",
+            "quantity": 395.0
+        },
+        {
+            "name": "Jack Daniel's",
+            "position": 2,
+            "id": "FAnWWdO7lcnH5AHQDg1p",
+            "imageUrl": "https://firebasestorage.googleapis.com/v0/b/bottender-9a87d.appspot.com/o/ingredient%2Fjack_daniels_wisky_clasic.jpg?alt=media&token=603af40a-8483-4247-942d-d6bbbff5b876",
+            "barcode": "5099873089712",
+            "type": "spirit",
+            "subtype": "whiskey",
+            "quantity": 220.0
+        },
+        {
+            "name": "Havana club",
+            "position": 3,
+            "id": "FnQFnO24Smh0FIZM9rVb",
+            "imageUrl": "https://firebasestorage.googleapis.com/v0/b/bottender-9a87d.appspot.com/o/ingredient%2Fhavana_club.jpg?alt=media&token=fa6d6bbd-4ae0-480e-b6f2-8be5de6cbbb2",
+            "barcode": "8501110080903",
+            "type": "spirit",
+            "subtype": "rum",
+            "quantity": 720.0
+        }
+    ],
+    "maxAvailableIngredientsCount": 4
+}
