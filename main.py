@@ -30,7 +30,7 @@ def get_local_ip():
 
 def start_server(host, port):
     print(f"HTTP server started at http://{host}:{port}")
-    uvicorn.run("server.main:app", host=host, port=port, reload=True)
+    uvicorn.run("server.main:app", host=host, port=port)
 
 def start_bluetooth_server():
     print("Bluetooth server started")
