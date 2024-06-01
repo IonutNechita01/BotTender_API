@@ -2,9 +2,11 @@ import uvicorn
 import socket
 import json
 import socket
-from bottender.bot_tender_ui import run_ui
+from bottender.bot_tender_ui import BotTenderUI
+from bottender.bot_tender import BotTender
 
-# from bluetooth_server.bluetooth_server import startBluetoothServer
+
+from bluetooth_server.bluetooth_server import startBluetoothServer
 
 def read_config():
     try:
@@ -32,12 +34,14 @@ def start_server(host, port):
     print(f"HTTP server started at http://{host}:{port}")
     uvicorn.run("server.main:app", host=host, port=port, reload=True)
 
-# def start_bluetooth_server():
-#     print("Bluetooth server started")
-#     startBluetoothServer()
+def start_bluetooth_server():
+    print("Bluetooth server started")
+    startBluetoothServer()
 
 if __name__ == "__main__":
-    run_ui()
+    bot_tender = BotTender()
+    app = BotTenderUI(bot_tender)
+    app.mainloop()
     config = read_config()
     host = get_local_ip()
     http_port = config.get("http_port", 8000)
@@ -45,5 +49,5 @@ if __name__ == "__main__":
     config["host"] = host
     write_config(config)
 
-    # start_bluetooth_server()
+    start_bluetooth_server()
     start_server(host, http_port)

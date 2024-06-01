@@ -40,6 +40,8 @@ class BotTender:
         for pump in self.pumps.keys():
             GPIO.setup(self.pumps[pump], GPIO.OUT)
 
+        self.status = "IDLE"
+
         self.id = botTenderConfig["id"]
         self.name = botTenderConfig["name"]
         self.host = serverConfig["host"]
@@ -51,7 +53,7 @@ class BotTender:
 
     def getStatus(self):
         return {
-            "status": sxvfb-run -a python launch_bottender_ui.pyelf.status
+            "status": self.status
         }
 
     def getId(self):
@@ -132,11 +134,13 @@ class BotTender:
         }
     
     def prepareCocktail(self, cocktail):
+        self.status = "BUSY"
         pumpThreads = []
         for ingredient in cocktail.ingredients:
             for availableIngredient in self.availableIngredients:
                 if availableIngredient.position == ingredient["position"]:
                     if availableIngredient.quantity <= ingredient["quantity"]:
+                        self.status = "IDLE"
                         return {
                             "status": "Not enough " + availableIngredient.name
                         }
@@ -153,10 +157,12 @@ class BotTender:
             with open("./bottender/bot_tender_config.json", "w") as f:
                 json.dump(self.toJson(), f, indent=4)
                 f.close()
+            self.status = "IDLE"
             return {
                 "status": Response.SUCCESS
             }
         except:
+            self.status = "IDLE"
             return {
                 "status": "Error saving changes to bot tender config file"
             }
